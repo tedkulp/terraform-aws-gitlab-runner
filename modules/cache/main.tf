@@ -56,24 +56,22 @@ resource "aws_s3_bucket_lifecycle_configuration" "build_cache_versioning" {
   rule {
     id     = "AbortIncompleteMultipartUploads"
     status = "Enabled"
+
     filter {
       prefix = ""
     }
-    abort_incomplete_multipart_upload {
-      days_after_initiation = 1
+
+    noncurrent_version_expiration {
+      noncurrent_days = var.cache_expiration_days
     }
-  }
 
-  rule {
-    id     = "clear"
-    status = var.cache_lifecycle_clear ? "Enabled" : "Disabled"
-
-    filter {
-      prefix = var.cache_lifecycle_prefix
+    abort_incomplete_multipart_upload {
+      days_after_initiation = var.cache_expiration_days
     }
 
     expiration {
       days = var.cache_expiration_days
+      expiration_object_delete_marker = false
     }
   }
 }

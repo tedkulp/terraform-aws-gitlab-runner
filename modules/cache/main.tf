@@ -71,7 +71,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "build_cache_versioning" {
 
     expiration {
       days = var.cache_expiration_days
-      expiration_object_delete_marker = false
     }
   }
 }
